@@ -1,4 +1,9 @@
-	Product.totals = (productid, clientid, productnumber, next) => {
+	Product.totals = (productid, clientid, isAdmin, productnumber, next) => {
+	if(isAdmin) {
+		Request.app.models.appuser.login({
+		email: 'admin@therealdeal.com',
+		password: 'pass12345'
+	}, (err, authInfo) => {
 		let where = {id: productid};
 		if (productnumber && clientid) {
 			  where.and = [{clientid}, {productnumber}];
@@ -15,8 +20,7 @@
 				}
 			}
 		};
-		Product.findOne(
-    filter, (err, product) => {
+		Product.findOne(filter, (err, product) => {
 			if (err) {
 				   return next(err);
 			}
@@ -75,3 +79,6 @@
 			next(err, result);
 		})
 	};
+	}
+	
+					 });
